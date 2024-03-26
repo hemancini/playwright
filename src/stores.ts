@@ -206,7 +206,7 @@ export const getRipleyProduct = async (browser: Browser, product: Product) => {
   );
   const prices = {
     list: await page.locator(".product-info > dl.prices-list dt").first().textContent(),
-    offer: await page.locator(".product-info > dl.prices-list dt").last().textContent(),
+    offer: await page.locator(".product-info > dl.prices-list dt").nth(1).textContent(),
   };
   const available = variants.find((variant) => variant.size === requieredVariant)?.stock ?? false;
   return {
