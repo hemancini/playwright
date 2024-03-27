@@ -5,7 +5,7 @@ tests:
   stage: test
   image: mcr.microsoft.com/playwright:v1.42.1-jammy
   script:
-    - npm ci
+    - npm i
     - node src/test.js
   variables:
     CI: "true"
