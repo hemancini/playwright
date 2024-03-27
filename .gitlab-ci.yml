@@ -7,5 +7,5 @@ tests:
   script:
     - npm i
     - node src/test.js
-  variables:
-    CI: "true"
+  # variables:
+  #   CI: "true"
