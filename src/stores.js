@@ -78,10 +78,9 @@ const getAndesgearProduct = async (browser, product) => {
 };
 
 const getParisProduct = async (browser, product) => {
-  const { url, requieredVariant, variantType } = product;
-  const page = await browser.newPage();
-
   try {
+    const { url, requieredVariant, variantType } = product;
+    const page = await browser.newPage();
     await page.goto(url, { timeout: 10000 });
     await page.waitForSelector("#pdp-size-variation-attribute-section > div.tw-flex.tw-gap-8px.tw-flex-wrap");
     await page.screenshot({ path: `images/${new URL(url).hostname}/${new Date().toISOString()}.png` });
