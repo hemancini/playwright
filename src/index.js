@@ -10,20 +10,24 @@ const isDebugging = process.env.DEBUG === "true" || true;
   // launch browser
   const browser = await webkit.launch({ headless: true });
 
-  const salomon = await getSalomonProducts(browser, pages.salomon);
-  console.log(salomon);
+  try {
+    const salomon = await getSalomonProducts(browser, pages.salomon);
+    console.log(salomon);
 
-  const andesgear = await getAndesgearProducts(browser, pages.andesgear);
-  console.log(andesgear);
+    const andesgear = await getAndesgearProducts(browser, pages.andesgear);
+    console.log(andesgear);
 
-  const paris = await getParisProducts(browser, pages.paris);
-  console.log(paris);
+    const paris = await getParisProducts(browser, pages.paris);
+    console.log(paris);
 
-  const ripley = await getRipleyProducts(browser, pages.ripley);
-  console.log(ripley);
+    const ripley = await getRipleyProducts(browser, pages.ripley);
+    console.log(ripley);
 
-  const mercadolibre = await getMercadolibreProducts(browser, pages.mercadolibre);
-  console.log(mercadolibre);
+    const mercadolibre = await getMercadolibreProducts(browser, pages.mercadolibre);
+    console.log(mercadolibre);
+  } catch (error) {
+    console.error("Error:", error);
+  }
 
   // close browser
   browser.close();
