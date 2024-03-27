@@ -80,39 +80,44 @@ const getAndesgearProduct = async (browser, product) => {
 const getParisProduct = async (browser, product) => {
   const { url, requieredVariant, variantType } = product;
   const page = await browser.newPage();
-  await page.goto(url);
-  await page.waitForSelector("#pdp-size-variation-attribute-section > div.tw-flex.tw-gap-8px.tw-flex-wrap");
-  await page.screenshot({ path: `images/${new URL(url).hostname}/${new Date().toISOString()}.png` });
 
-  const title = await page.locator("div.pdp-top__product-name > h1").textContent();
-  const variantsList = await page.locator("#pdp-size-variation-attribute-section > div.tw-flex.tw-gap-8px.tw-flex-wrap").locator("> *").all();
-  const variants = await Promise.all(
-    variantsList.map(async (variant) => {
-      const size = await variant.textContent().then((text) => text?.replace(" ", ".").trim());
-      const stock = await variant
-        .locator("> *")
-        .getAttribute("class")
-        .then((text) => text?.includes("tw-bg-transparent"));
-      return { size, stock };
-    })
-  );
-  const prices = {
-    list: await page.locator("div.price-box.offer-price.js-internet-price-container > div > p").textContent(),
-    offer: await page.locator("div.price-box.offer-price.js-internet-price-container > p.js-internet-price-price").textContent(),
-  };
-  if (prices.offer === "") prices.offer = await page.locator("div.price-box p.js-list-price-price").textContent();
-  if (prices.list === "") prices.list = prices.offer;
-  const available = variants.find((variant) => variant.size === requieredVariant)?.stock ?? false;
-  return {
-    date: new Date().toISOString(),
-    title,
-    url,
-    prices,
-    available,
-    requieredVariant,
-    variantType,
-    variants,
-  };
+  try {
+    await page.goto(url, { timeout: 10000 });
+    await page.waitForSelector("#pdp-size-variation-attribute-section > div.tw-flex.tw-gap-8px.tw-flex-wrap");
+    await page.screenshot({ path: `images/${new URL(url).hostname}/${new Date().toISOString()}.png` });
+
+    const title = await page.locator("div.pdp-top__product-name > h1").textContent();
+    const variantsList = await page.locator("#pdp-size-variation-attribute-section > div.tw-flex.tw-gap-8px.tw-flex-wrap").locator("> *").all();
+    const variants = await Promise.all(
+      variantsList.map(async (variant) => {
+        const size = await variant.textContent().then((text) => text?.replace(" ", ".").trim());
+        const stock = await variant
+          .locator("> *")
+          .getAttribute("class")
+          .then((text) => text?.includes("tw-bg-transparent"));
+        return { size, stock };
+      })
+    );
+    const prices = {
+      list: await page.locator("div.price-box.offer-price.js-internet-price-container > div > p").textContent(),
+      offer: await page.locator("div.price-box.offer-price.js-internet-price-container > p.js-internet-price-price").textContent(),
+    };
+    if (prices.offer === "") prices.offer = await page.locator("div.price-box p.js-list-price-price").textContent();
+    if (prices.list === "") prices.list = prices.offer;
+    const available = variants.find((variant) => variant.size === requieredVariant)?.stock ?? false;
+    return {
+      date: new Date().toISOString(),
+      title,
+      url,
+      prices,
+      available,
+      requieredVariant,
+      variantType,
+      variants,
+    };
+  } catch (error) {
+    console.error("Error al cargar la página:", error.message);
+  }
 };
 
 const getRipleyProduct = async (browser, product) => {
