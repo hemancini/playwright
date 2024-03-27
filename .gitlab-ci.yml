@@ -6,6 +6,6 @@ tests:
   image: mcr.microsoft.com/playwright:v1.42.1-jammy
   script:
     - npm i
-    - node src/test.js
-  # variables:
-  #   CI: "true"
+    - node src/index.js
+  variables:
+    CI: "true"
