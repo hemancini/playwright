@@ -1,5 +1,5 @@
 ```bash
-bun zapatillas.ts
+bun src/index.js
 ```
 
 Guia de tallas Salomon masculino
@@ -17,3 +17,8 @@ Guia de tallas Salomon masculino
 | 44            | 11   | 46     | 11.5 | 30   |
 | 44.5          | 11.5 | 46 2/3 | 12   | 30.5 |
 | 45            | 12   | 47 1/3 | 12.5 | 31   |
+
+## docker
+```bash
+docker run -it --rm -v $(pwd):/app -w /app --ipc=host mcr.microsoft.com/playwright:v1.42.1-jammy /bin/bash
+```

@@ -1,0 +1,10 @@
+stages:
+  - test
+
+tests:
+  stage: test
+  image: mcr.microsoft.com/playwright:v1.42.1-jammy
+  script:
+    - node src/test.js
+  variables:
+    CI: "true"
