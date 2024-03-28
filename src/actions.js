@@ -71,9 +71,9 @@ export const getAndesgearProduct = async (browser, product) => {
 export const getParisProduct = async (browser, product) => {
   const { url, requieredVariant, variantType } = product;
   const page = await browser.newPage();
-  await page.goto(url, { timeout: 10000 });
-  await page.waitForSelector("#pdp-size-variation-attribute-section > div.tw-flex.tw-gap-8px.tw-flex-wrap");
+  await page.goto(url, { timeout: 40000 });
   await page.screenshot({ path: `images/${new URL(url).hostname}/${new Date().toISOString()}.png` });
+  await page.waitForSelector("#pdp-size-variation-attribute-section > div.tw-flex.tw-gap-8px.tw-flex-wrap", { timeout: 20000 });
 
   const title = await page.locator("div.pdp-top__product-name > h1").textContent();
   const variantsList = await page.locator("#pdp-size-variation-attribute-section > div.tw-flex.tw-gap-8px.tw-flex-wrap").locator("> *").all();
