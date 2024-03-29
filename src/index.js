@@ -1,4 +1,4 @@
-import { chromium } from "@playwright/test";
+import { webkit } from "@playwright/test";
 import { sendMessage } from "./discord.js";
 import { pages } from "./pages.js";
 import { getParisProducts, getSalomonProducts, getAndesgearProducts, getRipleyProducts, getMercadolibreProducts, getTheNorthFaceProducts } from "./stores.js";
@@ -8,7 +8,7 @@ const allProducts = [];
 
 (async () => {
   // launch browser
-  const browser = await chromium.launch({ headless: HEADLESS, slowMo: 100 });
+  const browser = await webkit.launch({ headless: HEADLESS, slowMo: 100 });
   const context = await browser.newContext();
 
   try {
