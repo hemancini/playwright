@@ -71,9 +71,9 @@ export const getAndesgearProduct = async (browser, product) => {
 export const getParisProduct = async (browser, product) => {
   const { url, requieredVariant, variantType } = product;
   const page = await browser.newPage();
-  await page.goto(url, { timeout: 40000 });
+  await page.goto(url, { timeout: 30000 });
   await page.screenshot({ path: `images/${new URL(url).hostname}/${new Date().toISOString()}.png` });
-  await page.waitForSelector("#pdp-size-variation-attribute-section > div.tw-flex.tw-gap-8px.tw-flex-wrap", { timeout: 20000 });
+  await page.waitForSelector("#pdp-size-variation-attribute-section > div.tw-flex.tw-gap-8px.tw-flex-wrap", { timeout: 30000 });
 
   const title = await page.locator("div.pdp-top__product-name > h1").textContent();
   const variantsList = await page.locator("#pdp-size-variation-attribute-section > div.tw-flex.tw-gap-8px.tw-flex-wrap").locator("> *").all();
@@ -171,6 +171,39 @@ export const getMercadolibreProduct = async (browser, product) => {
 
   const available = variants?.find((variant) => variant.size === requieredVariant)?.stock ?? false;
 
+  return {
+    date: new Date().toISOString(),
+    title,
+    url,
+    prices,
+    available,
+    requieredVariant,
+    variantType,
+    variants,
+  };
+};
+
+export const getTheNorthFaceProduct = async (browser, product) => {
+  const { url, requieredVariant, variantType } = product;
+  const page = await browser.newPage();
+  await page.goto(url);
+  await page.screenshot({ path: `images/${new URL(url).hostname}/${new Date().toISOString()}.png` });
+
+  const title = await page.locator('[data-ui-id="page-title-wrapper"]').first().textContent();
+
+  await page.waitForSelector('[id^="option-label-standard_size-"]');
+  const variantsList = await page.locator('div[id^="option-label-standard_size-"]').all();
+  const variants = await Promise.all(
+    variantsList.map(async (variant) => {
+      const size = await variant.textContent();
+      return { size, stock: true };
+    })
+  );
+  const prices = {
+    list: await page.locator(".price").first().textContent(),
+    offer: await page.locator(".price").last().textContent(),
+  };
+  const available = variants.find((variant) => variant.size === requieredVariant)?.stock ?? false;
   return {
     date: new Date().toISOString(),
     title,

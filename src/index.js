@@ -1,9 +1,9 @@
 import { webkit } from "@playwright/test";
 import { sendMessage } from "./discord.js";
 import { pages } from "./pages.js";
-import { getParisProducts, getSalomonProducts, getAndesgearProducts, getRipleyProducts, getMercadolibreProducts } from "./stores.js";
+import { getParisProducts, getSalomonProducts, getAndesgearProducts, getRipleyProducts, getMercadolibreProducts, getTheNorthFaceProducts } from "./stores.js";
 
-const { DEBUG, HEADLESS } = process.env;
+const { DEBUG = false, HEADLESS = true } = process.env;
 const allProducts = [];
 
 (async () => {
@@ -11,20 +11,35 @@ const allProducts = [];
   const browser = await webkit.launch({ headless: HEADLESS, slowMo: 100 });
 
   try {
-    const salomon = await getSalomonProducts(browser, pages.salomon);
-    allProducts.push(...salomon);
+    if (pages.salomon.enable) {
+      const salomon = await getSalomonProducts(browser, pages.salomon.products);
+      allProducts.push(...salomon);
+    }
 
-    const andesgear = await getAndesgearProducts(browser, pages.andesgear);
-    allProducts.push(...andesgear);
+    if (pages.andesgear.enable) {
+      const andesgear = await getAndesgearProducts(browser, pages.andesgear.products);
+      allProducts.push(...andesgear);
+    }
 
-    const paris = await getParisProducts(browser, pages.paris);
-    allProducts.push(...paris);
+    if (pages.paris.enable) {
+      const paris = await getParisProducts(browser, pages.paris.products);
+      allProducts.push(...paris);
+    }
 
-    const ripley = await getRipleyProducts(browser, pages.ripley);
-    allProducts.push(...ripley);
+    if (pages.ripley.enable) {
+      const ripley = await getRipleyProducts(browser, pages.ripley.products);
+      allProducts.push(...ripley);
+    }
 
-    const mercadolibre = await getMercadolibreProducts(browser, pages.mercadolibre);
-    allProducts.push(...mercadolibre);
+    if (pages.mercadolibre.enable) {
+      const mercadolibre = await getMercadolibreProducts(browser, pages.mercadolibre.products);
+      allProducts.push(...mercadolibre);
+    }
+
+    if (pages.thenorthface.enable) {
+      const theNorthFace = await getTheNorthFaceProducts(browser, pages.thenorthface.products);
+      allProducts.push(...theNorthFace);
+    }
   } catch (error) {
     console.error("Error:", error);
   }

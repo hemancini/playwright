@@ -1,5 +1,5 @@
 import { printAvailable } from "./utils.js";
-import { getSalomonProduct, getAndesgearProduct, getParisProduct, getRipleyProduct, getMercadolibreProduct } from "./actions.js";
+import { getSalomonProduct, getAndesgearProduct, getParisProduct, getRipleyProduct, getMercadolibreProduct, getTheNorthFaceProduct } from "./actions.js";
 
 export const getSalomonProducts = async (browser, products) => {
   const salomonProducts = await Promise.all(
@@ -74,4 +74,19 @@ export const getMercadolibreProducts = async (browser, products) => {
     })
   );
   return mercadolibreProducts;
+};
+
+export const getTheNorthFaceProducts = async (browser, products) => {
+  const theNorthFaceProducts = await Promise.all(
+    products.map(async (product) => {
+      try {
+        const theNorthFaceProduct = await getTheNorthFaceProduct(browser, product);
+        printAvailable(theNorthFaceProduct);
+        return theNorthFaceProduct;
+      } catch (error) {
+        console.error("Error theNorthFace:", error);
+      }
+    })
+  );
+  return theNorthFaceProducts;
 };
